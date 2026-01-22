@@ -8,7 +8,8 @@ def load_and_prepare_data(csv_path, target_column):
     X = df.drop(columns=[target_column])
     y = df[target_column]
 
-    y = LabelEncoder().fit_transform(y)
+    le = LabelEncoder()
+    y = le.fit_transform(y)
 
     for col in X.columns:
         if X[col].dtype == object:
@@ -18,4 +19,4 @@ def load_and_prepare_data(csv_path, target_column):
 
     return train_test_split(
         X, y, test_size=0.25, random_state=42, stratify=y
-    )
+    ), le
