@@ -21,7 +21,11 @@ def model_comparison(models, X_test, y_test, le):
         })
 
     df = pd.DataFrame(metrics)
-    st.dataframe(df.style.format("{:.2f}"))
+
+    numeric_cols = ["Accuracy", "Precision", "Recall", "F1"]
+    st.dataframe(
+        df.style.format({col: "{:.2f}" for col in numeric_cols})
+    )
 
     st.subheader("Confusion Matrices")
     tabs = st.tabs(models.keys())
