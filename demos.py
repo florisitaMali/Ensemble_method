@@ -46,7 +46,8 @@ def model_comparison(models, X_test, y_test, le):
 
 # ------------------ TRICKY PACKETS ------------------
 def tricky_packets(models, X_test, y_test):
-    st.header("Tricky Packets Demo")
+    st.header("Tricky Packets Demo: Weak Model vs Ensembles")
+
     n = st.slider("Number of tricky packets", 1, 10, 5)
 
     idx = random.sample(range(X_test.shape[0]), n)
@@ -61,7 +62,26 @@ def tricky_packets(models, X_test, y_test):
         rows.append(row)
 
     df = pd.DataFrame(rows)
-    st.dataframe(df)
+
+    # ---------- Coloring logic ----------
+    def color_cells(row):
+        styles = []
+        true_val = row["True"]
+        for col in row.index:
+            if col == "True":
+                styles.append("")  # no color for true label
+            else:
+                if row[col] == true_val:
+                    styles.append("background-color: #b6fcd5")  # green
+                else:
+                    styles.append("background-color: #fcb6b6")  # red
+        return styles
+
+    st.write("🟩 Correct prediction &nbsp;&nbsp; 🟥 Incorrect prediction")
+
+    st.dataframe(
+        df.style.apply(color_cells, axis=1)
+    )
 
 # ------------------ NOISE STRESS TEST ------------------
 def noise_stress(models, X_test, y_test):
